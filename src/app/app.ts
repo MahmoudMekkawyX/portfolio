@@ -101,15 +101,6 @@ export class App {
       hue: 220,
     },
     {
-      name: 'Xceed Knowledge Hub',
-      kind: 'Internal tool',
-      summary: 'Documents fixes so repeat questions get answered faster. Employer internal tool, so no public demo.',
-      stack: ['HTML', 'CSS', 'JavaScript'],
-      repo: this.gh + 'xceed-knowledge-hub',
-      size: 'std',
-      hue: 270,
-    },
-    {
       name: 'Bookmark',
       kind: 'CRUD app',
       summary: 'Saves and manages bookmarks in the browser with localStorage.',
