@@ -135,7 +135,7 @@
             @if (p.demo) {
               <button type="button" class="demo" (click)="openPreview(p)">Open demo</button>
             }
-            <a [href]="p.repo" target="_blank" rel="noopener">Code &nearr;</a>
+            @if (p.kind === 'Internal tool') { <span class="private">Private repo, employer internal tool</span> } @else { <a [href]="p.repo" target="_blank" rel="noopener">Code &nearr;</a> }
           </footer>
         </article>
       }
