@@ -197,6 +197,12 @@ h1 .alt .ch { background: linear-gradient(100deg, var(--acc), var(--acc2)); back
   nav a { padding: 14px; font-size: 17px; }
   .bento { grid-template-columns: 1fr; }
   .card.wide, .card.tall { grid-column: span 1; grid-row: auto; }
+  .card p { font-size: 17px; line-height: 1.6; }
+  .card.sm { padding: 16px 18px; }
+  .card.sm header { margin-bottom: 14px; }
+  .card.sm h3 { font-size: 28px; }
+  .card.sm p { font-size: 15px; }
+  .card.sm footer { padding-top: 12px; }
   .tag { display: none; }
   .scroll-hint { display: none; }
   .track { font-size: 26px; }
