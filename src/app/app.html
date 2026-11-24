@@ -1,0 +1,107 @@
+<header class="top">
+  <a class="brand" href="#top" (click)="go('top'); $event.preventDefault()">MM<span>.</span></a>
+  <button class="burger" type="button" aria-label="Menu" (click)="toggleMenu()">&#9776;</button>
+  <nav [class.open]="menuOpen()">
+    @for (n of nav; track n.id) {
+      <a [href]="'#' + n.id" (click)="go(n.id); $event.preventDefault()">{{ n.label }}</a>
+    }
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <p class="eyebrow">Computer Engineer &middot; Giza, Egypt</p>
+    <h1>Mahmoud Mekkawy</h1>
+    <p class="lead">
+      Full Stack developer in the making (.NET + Angular), with hands-on IT support experience at Xceed.
+      I like building tools that remove repeat work.
+    </p>
+    <div class="cta">
+      <a class="btn primary" href="#projects" (click)="go('projects'); $event.preventDefault()">See my projects</a>
+      <a class="btn" [href]="links.github" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" [href]="links.linkedin" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>About</h2>
+    <p>
+      I graduated in Computer Engineering from the Modern Academy for Engineering (class of 2024) and completed the
+      Full Stack Web Development diploma at Route Academy (Angular + .NET).
+    </p>
+    <p>
+      Since March 2025 I work as an IT Help Desk Engineer at Xceed, supporting enterprise users under strict SLAs.
+      That job taught me to debug under pressure, explain things clearly and own a problem from start to finish.
+      I am now looking for a Junior Full Stack / .NET developer role.
+    </p>
+  </section>
+
+  <section id="skills">
+    <h2>Skills</h2>
+    <div class="grid skills">
+      @for (s of skills; track s.group) {
+        <article class="card">
+          <h3>{{ s.group }}</h3>
+          <ul class="chips">
+            @for (i of s.items; track i) {
+              <li>{{ i }}</li>
+            }
+          </ul>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section id="projects">
+    <h2>Projects</h2>
+    <div class="grid projects">
+      @for (p of projects; track p.name) {
+        <article class="card project">
+          <h3>{{ p.name }}</h3>
+          <p>{{ p.summary }}</p>
+          <ul class="chips">
+            @for (t of p.stack; track t) {
+              <li>{{ t }}</li>
+            }
+          </ul>
+          <a class="link" [href]="p.repo" target="_blank" rel="noopener">View on GitHub &rarr;</a>
+        </article>
+      }
+    </div>
+  </section>
+
+  <section id="experience">
+    <h2>Experience &amp; education</h2>
+    <div class="timeline">
+      <article>
+        <span class="when">Mar 2025 &ndash; Present</span>
+        <h3>IT Help Desk Engineer, Xceed</h3>
+        <p>
+          Front-line enterprise support: ticket triage and ownership, Windows, Active Directory and account issues,
+          network connectivity, Office 365 end-user help. Built an IT help desk app and a knowledge hub for the team.
+        </p>
+      </article>
+      <article>
+        <span class="when">Course</span>
+        <h3>Full Stack Web Development (Angular + .NET), Route Academy</h3>
+      </article>
+      <article>
+        <span class="when">2019 &ndash; 2024</span>
+        <h3>B.Sc. Computer Engineering, Modern Academy for Engineering</h3>
+        <p>Graduation project: KidsCode, an educational website for kids.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>Open to junior full stack / .NET roles and small freelance projects.</p>
+    <div class="cta">
+      <a class="btn primary" [href]="links.email">mahmoudmekkawy32&#64;gmail.com</a>
+      <a class="btn" [href]="links.linkedin" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" [href]="links.github" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </section>
+</main>
+
+<footer>&copy; {{ year }} Mahmoud Mekkawy. Built with Angular.</footer>
