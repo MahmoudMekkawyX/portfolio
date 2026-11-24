@@ -1,11 +1,15 @@
-import { Component, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, afterNextRender, inject, signal } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 interface Project {
   name: string;
+  kind: string;
   summary: string;
   stack: string[];
   repo: string;
   demo?: string;
+  size: 'wide' | 'tall' | 'std';
+  hue: number;
 }
 
 interface Skill {
@@ -19,9 +23,27 @@ interface Skill {
   styleUrl: './app.css',
 })
 export class App {
-  protected readonly menuOpen = signal(false);
-  protected readonly year = new Date().getFullYear();
+  private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly sanitizer = inject(DomSanitizer);
   private readonly gh = 'https://github.com/MahmoudMekkawyX/';
+  private readonly pages = 'https://mahmoudmekkawyx.github.io/';
+
+  protected readonly menuOpen = signal(false);
+  protected readonly photoOk = signal(true);
+  protected readonly accent = signal(0);
+  protected readonly progress = signal(0);
+  protected readonly activeId = signal('top');
+  protected readonly preview = signal<{ project: Project; url: SafeResourceUrl } | null>(null);
+  protected readonly year = new Date().getFullYear();
+  protected readonly nameLetters = 'Mahmoud'.split('');
+  protected readonly nameLetters2 = 'Mekkawy'.split('');
+
+  protected readonly accents = [
+    { name: 'Lime', hue: 95 },
+    { name: 'Cyan', hue: 190 },
+    { name: 'Violet', hue: 270 },
+    { name: 'Coral', hue: 15 },
+  ];
 
   protected readonly links = {
     github: 'https://github.com/MahmoudMekkawyX',
@@ -31,15 +53,17 @@ export class App {
 
   protected readonly nav = [
     { id: 'about', label: 'About' },
+    { id: 'work', label: 'Work' },
     { id: 'skills', label: 'Skills' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'experience', label: 'Experience' },
+    { id: 'path', label: 'Path' },
     { id: 'contact', label: 'Contact' },
   ];
 
+  protected readonly marquee = ['Angular', 'TypeScript', 'C#', 'ASP.NET Core', 'Entity Framework', 'SQL Server', 'RxJS', 'HTML', 'CSS', 'JavaScript', 'Bootstrap', 'Git'];
+
   protected readonly skills: Skill[] = [
-    { group: 'Back end', items: ['C#', 'ASP.NET Core MVC', 'ASP.NET Core Web API', 'Entity Framework Core', 'REST APIs'] },
     { group: 'Front end', items: ['Angular', 'TypeScript', 'JavaScript', 'HTML', 'CSS', 'Bootstrap', 'Tailwind'] },
+    { group: 'Back end', items: ['C#', 'ASP.NET Core MVC', 'ASP.NET Core Web API', 'Entity Framework Core', 'REST APIs'] },
     { group: 'Data', items: ['SQL Server', 'MySQL'] },
     { group: 'Practices', items: ['OOP', 'N-Tier / Onion architecture', 'Git & GitHub'] },
     { group: 'IT support', items: ['Windows', 'Active Directory', 'Network troubleshooting', 'Ticketing under SLAs', 'Office 365 end-user support'] },
@@ -47,54 +71,177 @@ export class App {
 
   protected readonly projects: Project[] = [
     {
-      name: 'E-Commerce Full Stack App',
-      summary: 'Full stack store with an Angular front end and an ASP.NET Core Web API, organized with onion architecture.',
-      stack: ['Angular', 'ASP.NET Core Web API', 'EF Core', 'SQL Server'],
-      repo: this.gh + 'Ecommerce.Solution',
-    },
-    {
-      name: 'Company.PL',
-      summary: 'Company management system built with ASP.NET Core MVC and a layered (N-Tier) structure.',
-      stack: ['ASP.NET Core MVC', 'EF Core', 'SQL Server'],
-      repo: this.gh + 'Company.PL',
-    },
-    {
-      name: 'IT Help Desk App',
-      summary: 'Internal tool built for my support team to handle help desk work.',
-      stack: ['Internal tool'],
-      repo: this.gh + 'IT-Help-Desk-App',
-    },
-    {
-      name: 'Xceed Knowledge Hub',
-      summary: 'Internal knowledge hub that documents fixes so repeat questions get answered faster.',
-      stack: ['Internal tool'],
-      repo: this.gh + 'xceed-knowledge-hub',
-    },
-    {
-      name: 'Weather App',
-      summary: 'Front end app that shows weather data from a public weather API.',
-      stack: ['JavaScript', 'REST API'],
-      repo: this.gh + 'weather-app-api',
-    },
-    {
-      name: 'Bookmark',
-      summary: 'Small CRUD app that saves bookmarks in the browser with localStorage.',
-      stack: ['JavaScript', 'localStorage'],
-      repo: this.gh + 'Bookmark',
-    },
-    {
-      name: 'Login System',
-      summary: 'Form validation and session handling with localStorage.',
-      stack: ['JavaScript', 'HTML', 'CSS'],
-      repo: this.gh + 'LoginSystem',
-    },
-    {
-      name: 'KidsCode (graduation project)',
+      name: 'KidsCode',
+      kind: 'Graduation project',
       summary: 'Educational website that teaches kids math, chemistry and programming through interactive games.',
       stack: ['HTML', 'CSS', 'JavaScript', 'Bootstrap', 'PHP', 'MySQL'],
       repo: this.gh + 'KidsCode-Graduation-Project',
+      demo: this.pages + 'KidsCode-Graduation-Project/',
+      size: 'wide',
+      hue: 15,
+    },
+    {
+      name: 'Weather App',
+      kind: 'Front end',
+      summary: 'Shows weather data from a public weather API.',
+      stack: ['JavaScript', 'REST API'],
+      repo: this.gh + 'weather-app-api',
+      demo: this.pages + 'weather-app-api/',
+      size: 'std',
+      hue: 190,
+    },
+    {
+      name: 'IT Help Desk App',
+      kind: 'Internal tool',
+      summary: 'Help desk hub built for my support team at work.',
+      stack: ['HTML', 'CSS', 'JavaScript'],
+      repo: this.gh + 'IT-Help-Desk-App',
+      demo: this.pages + 'IT-Help-Desk-App/',
+      size: 'std',
+      hue: 220,
+    },
+    {
+      name: 'Xceed Knowledge Hub',
+      kind: 'Internal tool',
+      summary: 'Documents fixes so repeat questions get answered faster.',
+      stack: ['HTML', 'CSS', 'JavaScript'],
+      repo: this.gh + 'xceed-knowledge-hub',
+      demo: this.pages + 'xceed-knowledge-hub/',
+      size: 'std',
+      hue: 270,
+    },
+    {
+      name: 'Bookmark',
+      kind: 'CRUD app',
+      summary: 'Saves and manages bookmarks in the browser with localStorage.',
+      stack: ['JavaScript', 'localStorage'],
+      repo: this.gh + 'Bookmark',
+      demo: this.pages + 'Bookmark/',
+      size: 'std',
+      hue: 95,
+    },
+    {
+      name: 'Login System',
+      kind: 'Forms',
+      summary: 'Sign up and sign in with client-side validation and localStorage.',
+      stack: ['JavaScript', 'HTML', 'CSS'],
+      repo: this.gh + 'LoginSystem',
+      demo: this.pages + 'LoginSystem/',
+      size: 'std',
+      hue: 330,
+    },
+    {
+      name: 'Ecommerce.Solution',
+      kind: 'Back end API',
+      summary: 'E-commerce REST API organized with onion architecture. Code only, no hosted demo.',
+      stack: ['ASP.NET Core Web API', 'EF Core', 'SQL Server'],
+      repo: this.gh + 'Ecommerce.Solution',
+      size: 'std',
+      hue: 45,
+    },
+    {
+      name: 'Company.PL',
+      kind: 'Back end MVC',
+      summary: 'Company management system with an N-Tier structure. Code only, no hosted demo.',
+      stack: ['ASP.NET Core MVC', 'EF Core', 'SQL Server'],
+      repo: this.gh + 'Company.PL',
+      size: 'std',
+      hue: 160,
     },
   ];
+
+  constructor() {
+    afterNextRender(() => {
+      const root = this.host.nativeElement as HTMLElement;
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('in');
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { threshold: 0.12 },
+      );
+      root.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+      const spy = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) if (e.isIntersecting) this.activeId.set(e.target.id);
+        },
+        { rootMargin: '-45% 0px -50% 0px' },
+      );
+      root.querySelectorAll('main > section[id]').forEach((el) => spy.observe(el));
+    });
+  }
+
+  protected setAccent(i: number): void {
+    this.accent.set(i);
+    (this.host.nativeElement as HTMLElement).style.setProperty('--ah', String(this.accents[i].hue));
+  }
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    this.progress.set(max > 0 ? (h.scrollTop / max) * 100 : 0);
+  }
+
+  @HostListener('window:pointermove', ['$event'])
+  onMove(e: PointerEvent): void {
+    const el = this.host.nativeElement as HTMLElement;
+    el.style.setProperty('--mx', e.clientX + 'px');
+    el.style.setProperty('--my', e.clientY + 'px');
+  }
+
+  @HostListener('window:keydown.escape')
+  onEsc(): void {
+    this.preview.set(null);
+  }
+
+  protected tilt(e: PointerEvent, card: HTMLElement): void {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    card.style.setProperty('--rx', (-y * 8).toFixed(2) + 'deg');
+    card.style.setProperty('--ry', (x * 10).toFixed(2) + 'deg');
+    card.style.setProperty('--gx', (x + 0.5) * 100 + '%');
+    card.style.setProperty('--gy', (y + 0.5) * 100 + '%');
+  }
+
+  protected untilt(card: HTMLElement): void {
+    card.style.setProperty('--rx', '0deg');
+    card.style.setProperty('--ry', '0deg');
+  }
+
+  protected magnet(e: PointerEvent, btn: HTMLElement): void {
+    const r = btn.getBoundingClientRect();
+    const x = e.clientX - (r.left + r.width / 2);
+    const y = e.clientY - (r.top + r.height / 2);
+    btn.style.transform = `translate(${x * 0.18}px, ${y * 0.3}px)`;
+  }
+
+  protected unmagnet(btn: HTMLElement): void {
+    btn.style.transform = '';
+  }
+
+  protected parallax(e: PointerEvent, el: HTMLElement): void {
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    el.style.setProperty('--px', x.toFixed(3));
+    el.style.setProperty('--py', y.toFixed(3));
+  }
+
+  protected openPreview(p: Project): void {
+    if (!p.demo) return;
+    this.preview.set({ project: p, url: this.sanitizer.bypassSecurityTrustResourceUrl(p.demo) });
+  }
+
+  protected closePreview(): void {
+    this.preview.set(null);
+  }
 
   protected toggleMenu(): void {
     this.menuOpen.update((v) => !v);

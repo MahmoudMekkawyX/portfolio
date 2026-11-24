@@ -1,48 +1,154 @@
+<div class="progress" [style.width.%]="progress()"></div>
+<div class="spot" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
 <header class="top">
   <a class="brand" href="#top" (click)="go('top'); $event.preventDefault()">MM<span>.</span></a>
-  <button class="burger" type="button" aria-label="Menu" (click)="toggleMenu()">&#9776;</button>
+  <button class="burger" type="button" aria-label="Menu" [attr.aria-expanded]="menuOpen()" (click)="toggleMenu()">
+    <i></i><i></i>
+  </button>
   <nav [class.open]="menuOpen()">
     @for (n of nav; track n.id) {
-      <a [href]="'#' + n.id" (click)="go(n.id); $event.preventDefault()">{{ n.label }}</a>
+      <a [href]="'#' + n.id" [class.on]="activeId() === n.id" (click)="go(n.id); $event.preventDefault()">{{ n.label }}</a>
     }
   </nav>
 </header>
 
 <main id="top">
-  <section class="hero">
-    <p class="eyebrow">Computer Engineer &middot; Giza, Egypt</p>
-    <h1>Mahmoud Mekkawy</h1>
-    <p class="lead">
-      Full Stack developer in the making (.NET + Angular), with hands-on IT support experience at Xceed.
-      I like building tools that remove repeat work.
-    </p>
-    <div class="cta">
-      <a class="btn primary" href="#projects" (click)="go('projects'); $event.preventDefault()">See my projects</a>
-      <a class="btn" [href]="links.github" target="_blank" rel="noopener">GitHub</a>
-      <a class="btn" [href]="links.linkedin" target="_blank" rel="noopener">LinkedIn</a>
+  <section class="hero" id="hero" #hero (pointermove)="parallax($event, hero)">
+    <div class="hero-copy">
+      <p class="eyebrow"><b class="dot"></b> Open to junior full stack / .NET roles</p>
+      <h1 aria-label="Mahmoud Mekkawy">
+        <span class="line">
+          @for (c of nameLetters; track $index) {
+            <span class="ch" [style.--i]="$index">{{ c }}</span>
+          }
+        </span>
+        <span class="line alt">
+          @for (c of nameLetters2; track $index) {
+            <span class="ch" [style.--i]="$index + 7">{{ c }}</span>
+          }
+        </span>
+      </h1>
+      <p class="lead">
+        I build interfaces in <em>Angular</em> and the .NET services behind them. Computer Engineer from Giza,
+        currently on the IT Help Desk at Xceed, writing the tools that remove repeat work.
+      </p>
+      <div class="cta">
+        <a class="btn primary" #b1 href="#work" (pointermove)="magnet($event, b1)" (pointerleave)="unmagnet(b1)"
+           (click)="go('work'); $event.preventDefault()">See live demos <span>&darr;</span></a>
+        <a class="btn" #b2 [href]="links.github" target="_blank" rel="noopener"
+           (pointermove)="magnet($event, b2)" (pointerleave)="unmagnet(b2)">GitHub</a>
+        <a class="btn" #b3 [href]="links.linkedin" target="_blank" rel="noopener"
+           (pointermove)="magnet($event, b3)" (pointerleave)="unmagnet(b3)">LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="hero-art">
+      <div class="portrait" aria-label="Portrait of Mahmoud Mekkawy">
+        <div class="ring"></div>
+        <div class="frame">
+          @if (photoOk()) {
+            <img src="photo.jpg" alt="Mahmoud Mekkawy" (error)="photoOk.set(false)" />
+          }
+          @if (!photoOk()) {
+            <div class="mono">MM</div>
+          }
+          <div class="sheen"></div>
+        </div>
+        <span class="tag t1">Angular</span>
+        <span class="tag t2">C#</span>
+        <span class="tag t3">TypeScript</span>
+        <span class="tag t4">.NET</span>
+      </div>
+
+      <div class="code" aria-hidden="true">
+        <div class="code-bar"><i></i><i></i><i></i><span>mahmoud.ts</span></div>
+        <pre><code><span class="k">const</span> mahmoud = &#123;
+  <span class="p">role</span>: <span class="s">'Junior Full Stack'</span>,
+  <span class="p">stack</span>: [<span class="s">'Angular'</span>, <span class="s">'.NET'</span>],
+  <span class="p">sql</span>: <span class="s">'SQL Server'</span>,
+  <span class="p">building</span>: signal(<span class="s">'next thing'</span>)
+&#125;;<span class="caret"></span></code></pre>
+      </div>
+    </div>
+    <a class="scroll-hint" href="#about" (click)="go('about'); $event.preventDefault()" aria-label="Scroll down"><i></i></a>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="track">
+      @for (r of [0, 1]; track r) {
+        @for (m of marquee; track m) {
+          <span>{{ m }}</span><b>&#10022;</b>
+        }
+      }
+    </div>
+  </div>
+
+  <section id="about" class="about">
+    <h2 class="reveal"><small>01</small> About</h2>
+    <div class="about-grid">
+      <div class="reveal">
+        <p class="big">
+          Computer Engineering graduate (Modern Academy, 2024) and Route Academy Full Stack diploma (Angular + .NET).
+        </p>
+        <p>
+          Since March 2025 I work as an IT Help Desk Engineer at Xceed, supporting enterprise users under strict SLAs.
+          That job taught me to debug under pressure, explain things clearly and own a problem from start to finish.
+          Now I am moving into development.
+        </p>
+      </div>
+      <aside class="reveal play">
+        <h3>Try the accent</h3>
+        <p>A small Angular signal drives the whole palette of this page.</p>
+        <div class="swatches">
+          @for (a of accents; track a.name; let i = $index) {
+            <button type="button" [class.on]="accent() === i" [style.--h]="a.hue" (click)="setAccent(i)">{{ a.name }}</button>
+          }
+        </div>
+      </aside>
     </div>
   </section>
 
-  <section id="about">
-    <h2>About</h2>
-    <p>
-      I graduated in Computer Engineering from the Modern Academy for Engineering (class of 2024) and completed the
-      Full Stack Web Development diploma at Route Academy (Angular + .NET).
-    </p>
-    <p>
-      Since March 2025 I work as an IT Help Desk Engineer at Xceed, supporting enterprise users under strict SLAs.
-      That job taught me to debug under pressure, explain things clearly and own a problem from start to finish.
-      I am now looking for a Junior Full Stack / .NET developer role.
-    </p>
+  <section id="work" class="work">
+    <h2 class="reveal"><small>02</small> Work</h2>
+    <p class="sub reveal">Six of these run live. Open any card to try it right here, or go to the code.</p>
+    <div class="bento">
+      @for (p of projects; track p.name) {
+        <article class="card reveal" #card [class]="'card reveal ' + p.size" [style.--h]="p.hue"
+                 (pointermove)="tilt($event, card)" (pointerleave)="untilt(card)">
+          <div class="glow"></div>
+          <header>
+            <span class="kind">{{ p.kind }}</span>
+            @if (p.demo) {
+              <span class="live"><b></b> Live</span>
+            }
+          </header>
+          <h3>{{ p.name }}</h3>
+          <p>{{ p.summary }}</p>
+          <ul class="chips">
+            @for (t of p.stack; track t) {
+              <li>{{ t }}</li>
+            }
+          </ul>
+          <footer>
+            @if (p.demo) {
+              <button type="button" class="demo" (click)="openPreview(p)">Open demo</button>
+            }
+            <a [href]="p.repo" target="_blank" rel="noopener">Code &nearr;</a>
+          </footer>
+        </article>
+      }
+    </div>
   </section>
 
-  <section id="skills">
-    <h2>Skills</h2>
-    <div class="grid skills">
+  <section id="skills" class="skills">
+    <h2 class="reveal"><small>03</small> Skills</h2>
+    <div class="skill-grid">
       @for (s of skills; track s.group) {
-        <article class="card">
+        <article class="reveal">
           <h3>{{ s.group }}</h3>
-          <ul class="chips">
+          <ul>
             @for (i of s.items; track i) {
               <li>{{ i }}</li>
             }
@@ -52,56 +158,52 @@
     </div>
   </section>
 
-  <section id="projects">
-    <h2>Projects</h2>
-    <div class="grid projects">
-      @for (p of projects; track p.name) {
-        <article class="card project">
-          <h3>{{ p.name }}</h3>
-          <p>{{ p.summary }}</p>
-          <ul class="chips">
-            @for (t of p.stack; track t) {
-              <li>{{ t }}</li>
-            }
-          </ul>
-          <a class="link" [href]="p.repo" target="_blank" rel="noopener">View on GitHub &rarr;</a>
-        </article>
-      }
-    </div>
-  </section>
-
-  <section id="experience">
-    <h2>Experience &amp; education</h2>
-    <div class="timeline">
-      <article>
-        <span class="when">Mar 2025 &ndash; Present</span>
+  <section id="path" class="path">
+    <h2 class="reveal"><small>04</small> Path</h2>
+    <ol class="timeline">
+      <li class="reveal">
+        <span class="when">Mar 2025 &ndash; Now</span>
         <h3>IT Help Desk Engineer, Xceed</h3>
         <p>
           Front-line enterprise support: ticket triage and ownership, Windows, Active Directory and account issues,
           network connectivity, Office 365 end-user help. Built an IT help desk app and a knowledge hub for the team.
         </p>
-      </article>
-      <article>
+      </li>
+      <li class="reveal">
         <span class="when">Course</span>
         <h3>Full Stack Web Development (Angular + .NET), Route Academy</h3>
-      </article>
-      <article>
+      </li>
+      <li class="reveal">
         <span class="when">2019 &ndash; 2024</span>
         <h3>B.Sc. Computer Engineering, Modern Academy for Engineering</h3>
         <p>Graduation project: KidsCode, an educational website for kids.</p>
-      </article>
-    </div>
+      </li>
+    </ol>
   </section>
 
-  <section id="contact">
-    <h2>Contact</h2>
-    <p>Open to junior full stack / .NET roles and small freelance projects.</p>
-    <div class="cta">
-      <a class="btn primary" [href]="links.email">mahmoudmekkawy32&#64;gmail.com</a>
-      <a class="btn" [href]="links.linkedin" target="_blank" rel="noopener">LinkedIn</a>
-      <a class="btn" [href]="links.github" target="_blank" rel="noopener">GitHub</a>
+  <section id="contact" class="contact">
+    <h2 class="reveal"><small>05</small> Contact</h2>
+    <p class="huge reveal">Let's build something<br />people enjoy using.</p>
+    <div class="cta reveal">
+      <a class="btn primary" #c1 [href]="links.email" (pointermove)="magnet($event, c1)" (pointerleave)="unmagnet(c1)">mahmoudmekkawy32&#64;gmail.com</a>
+      <a class="btn" #c2 [href]="links.linkedin" target="_blank" rel="noopener" (pointermove)="magnet($event, c2)" (pointerleave)="unmagnet(c2)">LinkedIn</a>
+      <a class="btn" #c3 [href]="links.github" target="_blank" rel="noopener" (pointermove)="magnet($event, c3)" (pointerleave)="unmagnet(c3)">GitHub</a>
     </div>
   </section>
 </main>
 
-<footer>&copy; {{ year }} Mahmoud Mekkawy. Built with Angular.</footer>
+<footer class="foot">&copy; {{ year }} Mahmoud Mekkawy &middot; Built with Angular, signals and plain CSS</footer>
+
+@if (preview(); as pv) {
+  <div class="modal" (click)="closePreview()" role="dialog" aria-modal="true" [attr.aria-label]="pv.project.name + ' demo'">
+    <div class="browser" (click)="$event.stopPropagation()">
+      <div class="bar">
+        <i></i><i></i><i></i>
+        <span class="url">{{ pv.project.demo }}</span>
+        <a [href]="pv.project.demo" target="_blank" rel="noopener">Open in tab &nearr;</a>
+        <button type="button" (click)="closePreview()" aria-label="Close">&times;</button>
+      </div>
+      <iframe [src]="pv.url" [title]="pv.project.name" loading="lazy"></iframe>
+    </div>
+  </div>
+}
