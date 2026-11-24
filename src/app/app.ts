@@ -68,7 +68,7 @@ export class App {
     { group: 'Back end (learning, used in my projects)', items: ['C#', 'ASP.NET Core MVC', 'Entity Framework Core', 'Repository and Unit of Work', 'AutoMapper', 'ASP.NET Core Identity (cookie login)', 'N-Tier architecture', 'ASP.NET Core Web API (started)'] },
     { group: 'Data', items: ['SQL Server', 'MySQL', 'SQLite'] },
     { group: 'Front end', items: ['Angular', 'TypeScript', 'JavaScript', 'HTML', 'CSS', 'Bootstrap'] },
-    { group: 'IT support (day job)', items: ['Windows', 'Active Directory', 'Network troubleshooting', 'Ticketing under SLAs', 'Office 365 end-user support'] },
+    { group: 'IT support (day job)', items: ['Hardware troubleshooting and repair', 'Software and Windows troubleshooting', 'Network fault troubleshooting', 'Active Directory (resets, unlocks, domain rejoin)', 'Office 365 end-user support', 'Ticketing under SLAs'] },
     { group: 'Tools', items: ['Git and GitHub', 'Visual Studio', 'VS Code'] },
   ];
 
