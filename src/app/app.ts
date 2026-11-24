@@ -73,10 +73,10 @@ export class App {
     {
       name: 'KidsCode',
       kind: 'Graduation project',
-      summary: 'Educational website that teaches kids math, chemistry and programming through interactive games.',
+      summary: 'Educational website that teaches kids math, chemistry and programming through interactive games. The live demo is a read-only snapshot with sample data (demo logins on the page).',
       stack: ['HTML', 'CSS', 'JavaScript', 'Bootstrap', 'PHP', 'MySQL'],
       repo: this.gh + 'KidsCode-Graduation-Project',
-      demo: this.pages + 'KidsCode-Graduation-Project/',
+      demo: this.pages + 'KidsCode-Graduation-Project/demo/',
       size: 'wide',
       hue: 15,
     },
