@@ -8,6 +8,9 @@ interface Project {
   stack: string[];
   repo: string;
   demo?: string;
+  newTab?: boolean;
+  status?: string;
+  facts?: string[];
   size: 'wide' | 'tall' | 'std';
   hue: number;
 }
@@ -59,17 +62,35 @@ export class App {
     { id: 'contact', label: 'Contact' },
   ];
 
-  protected readonly marquee = ['Angular', 'TypeScript', 'C#', 'ASP.NET Core', 'Entity Framework', 'SQL Server', 'RxJS', 'HTML', 'CSS', 'JavaScript', 'Bootstrap', 'Git'];
+  protected readonly marquee = ['C#', 'ASP.NET Core MVC', 'Entity Framework Core', 'SQL Server', 'Angular', 'TypeScript', 'JavaScript', 'HTML', 'CSS', 'Git'];
 
   protected readonly skills: Skill[] = [
-    { group: 'Front end', items: ['Angular', 'TypeScript', 'JavaScript', 'HTML', 'CSS', 'Bootstrap', 'Tailwind'] },
-    { group: 'Back end', items: ['C#', 'ASP.NET Core MVC', 'ASP.NET Core Web API', 'Entity Framework Core', 'REST APIs'] },
-    { group: 'Data', items: ['SQL Server', 'MySQL'] },
-    { group: 'Practices', items: ['OOP', 'N-Tier / Onion architecture', 'Git & GitHub'] },
-    { group: 'IT support', items: ['Windows', 'Active Directory', 'Network troubleshooting', 'Ticketing under SLAs', 'Office 365 end-user support'] },
+    { group: 'Back end (learning, used in my projects)', items: ['C#', 'ASP.NET Core MVC', 'Entity Framework Core', 'Repository and Unit of Work', 'AutoMapper', 'ASP.NET Core Identity (cookie login)', 'N-Tier architecture', 'ASP.NET Core Web API (started)'] },
+    { group: 'Data', items: ['SQL Server', 'MySQL', 'SQLite'] },
+    { group: 'Front end', items: ['Angular', 'TypeScript', 'JavaScript', 'HTML', 'CSS', 'Bootstrap'] },
+    { group: 'IT support (day job)', items: ['Windows', 'Active Directory', 'Network troubleshooting', 'Ticketing under SLAs', 'Office 365 end-user support'] },
+    { group: 'Tools', items: ['Git and GitHub', 'Visual Studio', 'VS Code'] },
   ];
 
   protected readonly projects: Project[] = [
+    {
+      name: 'Company.PL',
+      kind: 'Back end MVC',
+      summary: 'Company management app I built while learning ASP.NET Core MVC: departments and employees with full CRUD, and a login. The live demo uses SQLite and made-up data so it can run on free hosting (the original uses SQL Server). Demo login: demo@example.com / Demo@123.',
+      facts: [
+        'N-Tier: Presentation (MVC), Business Logic, Data Access',
+        'Generic and specific repositories, Unit of Work',
+        'DTOs and AutoMapper between layers',
+        'EF Core code-first migrations on SQL Server',
+        'ASP.NET Core Identity login with cookies, controllers behind [Authorize]',
+      ],
+      stack: ['ASP.NET Core MVC', 'EF Core', 'SQL Server', 'Identity'],
+      repo: this.gh + 'Company.PL',
+      demo: 'https://companypl-demo-production.up.railway.app/',
+      newTab: true,
+      size: 'wide',
+      hue: 160,
+    },
     {
       name: 'KidsCode',
       kind: 'Graduation project',
@@ -77,7 +98,7 @@ export class App {
       stack: ['HTML', 'CSS', 'JavaScript', 'Bootstrap', 'PHP', 'MySQL'],
       repo: this.gh + 'KidsCode-Graduation-Project',
       demo: this.pages + 'KidsCode-Graduation-Project/demo/',
-      size: 'wide',
+      size: 'std',
       hue: 15,
     },
     {
@@ -123,20 +144,18 @@ export class App {
     {
       name: 'Ecommerce.Solution',
       kind: 'Back end API',
-      summary: 'E-commerce REST API organized with onion architecture. Code only, no hosted demo.',
+      status: 'In progress',
+      summary: 'My practice project for an e-commerce REST API with onion architecture. Early stage: the layers, the product entities and the first migration are in place. Authentication, validation and the API endpoints are still to build. Code only, no hosted demo.',
+      facts: [
+        'Onion layers: Domain, Services, Persistence, Presentation, Shared',
+        'Entities: Product, ProductBrand, ProductType',
+        'EF Core DbContext, entity configuration and a SQL Server migration',
+        'Not built yet: JWT, roles, validation, pagination, tests',
+      ],
       stack: ['ASP.NET Core Web API', 'EF Core', 'SQL Server'],
       repo: this.gh + 'Ecommerce.Solution',
       size: 'std',
       hue: 45,
-    },
-    {
-      name: 'Company.PL',
-      kind: 'Back end MVC',
-      summary: 'Company management system with an N-Tier structure. Code only, no hosted demo.',
-      stack: ['ASP.NET Core MVC', 'EF Core', 'SQL Server'],
-      repo: this.gh + 'Company.PL',
-      size: 'std',
-      hue: 160,
     },
   ];
 
