@@ -11,7 +11,7 @@ interface Project {
   newTab?: boolean;
   status?: string;
   facts?: string[];
-  size: 'wide' | 'tall' | 'std';
+  size: 'wide' | 'tall' | 'std' | 'sm';
   hue: number;
 }
 
@@ -65,7 +65,7 @@ export class App {
   protected readonly marquee = ['C#', 'ASP.NET Core MVC', 'Entity Framework Core', 'SQL Server', 'Angular', 'TypeScript', 'JavaScript', 'HTML', 'CSS', 'Git'];
 
   protected readonly skills: Skill[] = [
-    { group: 'Back end (learning, used in my projects)', items: ['C#', 'ASP.NET Core MVC', 'Entity Framework Core', 'Repository and Unit of Work', 'AutoMapper', 'ASP.NET Core Identity (cookie login)', 'N-Tier architecture', 'ASP.NET Core Web API (started)'] },
+    { group: 'Backend Development | Practical Projects', items: ['C#', 'ASP.NET Core MVC', 'Entity Framework Core', 'Repository and Unit of Work', 'AutoMapper', 'ASP.NET Core Identity (cookie login)', 'N-Tier architecture', 'ASP.NET Core Web API (started)'] },
     { group: 'Data', items: ['SQL Server', 'MySQL', 'SQLite'] },
     { group: 'Front end', items: ['Angular', 'TypeScript', 'JavaScript', 'HTML', 'CSS', 'Bootstrap'] },
     { group: 'IT support (day job)', items: ['Hardware troubleshooting and repair', 'Software and Windows troubleshooting', 'Network fault troubleshooting', 'Active Directory (resets, unlocks, domain rejoin)', 'Office 365 end-user support', 'Ticketing under SLAs'] },
@@ -76,7 +76,7 @@ export class App {
     {
       name: 'Company.PL',
       kind: 'Back end MVC',
-      summary: 'Company management app I built while learning ASP.NET Core MVC: departments and employees with full CRUD, and a login. The live demo uses SQLite and made-up data so it can run on free hosting (the original uses SQL Server). Demo login: demo@example.com / Demo@123.',
+      summary: 'Company management app built with ASP.NET Core MVC: departments and employees with full CRUD, and a login. The live demo uses SQLite and made-up data so it can run on free hosting (the original uses SQL Server). Demo login: demo@example.com / Demo@123.',
       facts: [
         'N-Tier: Presentation (MVC), Business Logic, Data Access',
         'Generic and specific repositories, Unit of Work',
@@ -108,7 +108,7 @@ export class App {
       stack: ['JavaScript', 'REST API'],
       repo: this.gh + 'weather-app-api',
       demo: this.pages + 'weather-app-api/',
-      size: 'std',
+      size: 'sm',
       hue: 190,
     },
     {
@@ -128,7 +128,7 @@ export class App {
       stack: ['JavaScript', 'localStorage'],
       repo: this.gh + 'Bookmark',
       demo: this.pages + 'Bookmark/',
-      size: 'std',
+      size: 'sm',
       hue: 95,
     },
     {
@@ -138,7 +138,7 @@ export class App {
       stack: ['JavaScript', 'HTML', 'CSS'],
       repo: this.gh + 'LoginSystem',
       demo: this.pages + 'LoginSystem/',
-      size: 'std',
+      size: 'sm',
       hue: 330,
     },
     {
